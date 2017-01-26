@@ -19,7 +19,6 @@ if(os == 'Linux'){
 } else{
     var ipTarget = 'localhost:5000'
 }
-alert(os)
 var newMarker = null;
 
 function addMarker(e){
