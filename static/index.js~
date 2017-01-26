@@ -13,14 +13,19 @@ var iconType1 = L.icon({
     iconSize: [32, 32],
 });
 
-getOS();
+var os = getOS();
+if(os == 'Linux'){
+    var ipTarget = '52.205.68.66:5000';
+} else{
+   var ipTarget = 'localhost:5000'
+}
 
 var newMarker = null;
 
 function addMarker(e){
   var clickLat = e.latlng.lat;
   var clickLng = e.latlng.lng;
-  $.get('http://localhost:5000/data?longitude=' + clickLng + '&latitude=' + clickLat, (data) => {
+  $.get('http://' + ipTarget + '/data?longitude=' + clickLng + '&latitude=' + clickLat, (data) => {
 if(newMarker != null){
   newMarker.remove();
   console.log("Removing");
@@ -60,7 +65,7 @@ function render(){
       mymap.panTo(new L.LatLng(latitude, longitude));
       mymap.setZoom(10);
 
-      $.get('http://localhost:5000/data?longitude=' + longitude + '&latitude=' + latitude, (data) => {
+      $.get('http://' + ipTarget + '/data?longitude=' + longitude + '&latitude=' + latitude, (data) => {
           console.log(data);
           result = data.satellite_details;
           var sat_alt = map.call(result, (v) => (v.sat_alt));
