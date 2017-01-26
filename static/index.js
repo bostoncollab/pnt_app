@@ -17,9 +17,9 @@ var os = getOS();
 if(os == 'Linux'){
     var ipTarget = '52.205.68.66:5000';
 } else{
-   var ipTarget = 'localhost:5000'
+    var ipTarget = 'localhost:5000'
 }
-
+alert(os)
 var newMarker = null;
 
 function addMarker(e){
