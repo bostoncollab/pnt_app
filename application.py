@@ -34,7 +34,7 @@ class LocationAPI(Resource):
 
         if random.random() > .9:
             downloadTLE()
-        visible_satellites, satellite_details, constellation_quality = getVisibleGPSSatellites(latitudevalue, latitudevalue)
+        visible_satellites, satellite_details, constellation_quality = getVisibleGPSSatellites(latitudevalue, latitudevalue, elevation_query_response)
     	total_response = {'latitude':   latitude_string,
    		      'longitude':  longitude_string,
   		      'elevation':  elevation_query_response,

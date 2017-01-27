@@ -13,6 +13,9 @@ var iconType1 = L.icon({
     iconSize: [32, 32],
 });
 
+var ip = document.location.hostname;
+console.log(ip)
+
 var os = getOS();
 if(os == 'Linux'){
     var ipTarget = '52.205.68.66:5000';

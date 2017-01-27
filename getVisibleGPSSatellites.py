@@ -39,12 +39,13 @@ def loadTLE(filename):
     return satlist
 
 
-def getVisibleGPSSatellites(lat, lon):
+def getVisibleGPSSatellites(lat, lon, elev):
     filename = './files/NORAD_TLE_GPS.txt'
     sat      = loadTLE(filename)
     nSat     = len(sat)
 
     rx      = ephem.Observer()
+    rx.elevation = elev
     rx.lat  = np.deg2rad(lat)
     rx.long = np.deg2rad(lon)
 

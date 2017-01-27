@@ -13,13 +13,20 @@ var iconType1 = L.icon({
     iconSize: [32, 32],
 });
 
-var os = getOS();
-if(os == 'Linux'){
-    var ipTarget = 'localhost:5000';
-} else{
-   var ipTarget = 'localhost:5000'
-}
+var ip = document.location.hostname;
 
+//var os = getOS();
+//if(os == 'Linux'){
+//    var ipTarget = '52.205.68.66:5000';
+//} else{
+//    var ipTarget = 'localhost:5000'
+//}
+
+if(ip == '52.205.68.66'){
+    var ipTarget = '52.205.68.66:5000';
+} else{
+    var ipTarget = 'localhost:5000'
+}
 var newMarker = null;
 
 function addMarker(e){
