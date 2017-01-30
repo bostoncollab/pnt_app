@@ -13,12 +13,19 @@ var iconType1 = L.icon({
     iconSize: [32, 32],
 });
 
-var ip = document.location.hostname;
-if(ip == '52.205.68.66'){
-    var ipTarget = '52.205.68.66:5000';
-} else{
-    var ipTarget = 'localhost:5000'
-}
+//var os = getOS();
+//if(os == 'Linux'){
+//    var ipTarget = '52.205.68.66:5000';
+//} else{
+//    var ipTarget = 'localhost:5000'
+//}
+
+// if(ip == '52.205.68.66'){
+//     var ipTarget = '52.205.68.66:5000';
+// } else{
+//     var ipTarget = 'localhost:5000'
+// }
+var ipTarget = location.host
 var newMarker = null;
 
 function addMarker(e){
@@ -57,7 +64,7 @@ function onMapClick(e, data) {
 //	            "Elevation: " + String(data.elevation) + "<br>" + "No. Visible Satellites: " + String(data.no_visible_satellites))
 //    .openOn(mymap);
 }
-		
+
 function render(){
       var longitude = document.getElementById('longitude').value;
       var latitude = document.getElementById('latitude').value;

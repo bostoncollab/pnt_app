@@ -3,10 +3,8 @@ import urllib
 import pprint
 
 ELEVATION_BASE_URL = 'https://maps.googleapis.com/maps/api/elevation/json'
-test = "42.356872,-71.057494"
 
-
-def getElevation(locations=test, key="", **elvtn_args):
+def getElevation(locations, key="", **elvtn_args):
     elvtn_args.update({
         'locations': locations,
         'key': key
