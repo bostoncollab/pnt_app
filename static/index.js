@@ -14,12 +14,20 @@ var iconType1 = L.icon({
 });
 
 var ip = document.location.hostname;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7075f34e2b46c3b3789e77fcd9bd6da9d07aa1e6
 //var os = getOS();
 //if(os == 'Linux'){
 //    var ipTarget = '52.205.68.66:5000';
 //} else{
 //    var ipTarget = 'localhost:5000'
 //}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7075f34e2b46c3b3789e77fcd9bd6da9d07aa1e6
 if(ip == '52.205.68.66'){
     var ipTarget = '52.205.68.66:5000';
 } else{

@@ -66,6 +66,7 @@ def getVisibleGPSSatellites(lat, lon, elev):
     nSat     = len(sat)
 
     rx      = ephem.Observer()
+    rx.elevation = elev
     rx.lat  = np.deg2rad(lat)
     rx.long = np.deg2rad(lon)
     rx.elevation = elev
