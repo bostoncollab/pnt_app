@@ -15,8 +15,10 @@ var iconType1 = L.icon({
 
 var ip = document.location.hostname;
 if(ip == '52.205.68.66'){
+    console.log("Running AWS version")
     var ipTarget = '52.205.68.66:5000';
 } else{
+    console.log("Running localhost version")
     var ipTarget = 'localhost:5000'
 }
 var newMarker = null;

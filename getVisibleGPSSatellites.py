@@ -1,4 +1,5 @@
 import urllib
+import urllib2
 import nvector as nv
 import numpy as np
 import ephem
@@ -8,12 +9,16 @@ import pycurl
 import json
 import jsonify
 import simplejson
+import math
 
 ELEVATION_BASE_URL = 'https://maps.googleapis.com/maps/api/elevation/json'
 
-
 # Google Elevation API info
 myKey = "AIzaSyAZgMQ6edjbiq3hO5Aq2XhWO5bo0Ot2nfE"
+
+def n_choose_k(n,k):
+    return math.factorial(n)/math.factorial(k)/math.factorial(n-k)
+
 
 def getElevationPath(path="", key="", samples="100", **elvtn_args):
       elvtn_args.update({
@@ -35,12 +40,14 @@ def getElevationPath(path="", key="", samples="100", **elvtn_args):
 
 # Downloads current NORAD Two-Line Element Sets for GPS
 def downloadTLE():
-    with open('./files/NORAD_TLE_GPS.txt', 'wb') as f:
-        c = pycurl.Curl()
-        c.setopt(c.URL, 'http://celestrak.com/NORAD/elements/gps-ops.txt')
-        c.setopt(c.WRITEDATA, f)
-        c.perform()
-        c.close()
+    url = 'http://celestrak.com/NORAD/elements/gps-ops.txt'
+    response = urllib2.urlopen(url)
+    with open('./files/NORAD_TLE_GPS.txt', 'w') as f: f.write(response.read())
+#        c = pycurl.Curl()
+#        c.setopt(c.URL, 'http://celestrak.com/NORAD/elements/gps-ops.txt')
+#        c.setopt(c.WRITEDATA, f)
+#        c.perform()
+#        c.close()
 
 # Loads a TLE file and creates a list of satellites
 def loadTLE(filename):
@@ -118,14 +125,14 @@ def getVisibleGPSSatellites(lat, lon, elev):
     print (str(number_visible) + " are visible")
     
     too_close = 0
-    s = 0
     for i in range(0, number_visible):
         for j in range(i+1, number_visible):
-            s = s + 1.0
             ang = float(repr(ephem.separation(sat_vis[i], sat_vis[j])))*180/ephem.pi
             if ephem.degrees(ang) < 30:
                 too_close = too_close + 1.0
-
+    
+    s = n_choose_k(number_visible, 2)
+    print str(s) + " is the nchoosek value"
     too_close_metric = float(s-too_close)/s 
     too_low_metric   = 1.0 - float(too_low/number_visible) 
     constellation_quality = (too_close_metric + too_low_metric)/2.0           
