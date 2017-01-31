@@ -5,13 +5,14 @@ import numpy as np
 import ephem
 import datetime
 import os
-import pycurl
-import json
-import jsonify
+import requests
 import simplejson
 import math
 
 ELEVATION_BASE_URL = 'https://maps.googleapis.com/maps/api/elevation/json'
+
+url = 'http://celestrak.com/NORAD/elements/gps-ops.txt'
+elevationFile = requests.get(url)
 
 # Google Elevation API info
 myKey = "AIzaSyAZgMQ6edjbiq3hO5Aq2XhWO5bo0Ot2nfE"
@@ -19,6 +20,10 @@ myKey = "AIzaSyAZgMQ6edjbiq3hO5Aq2XhWO5bo0Ot2nfE"
 def n_choose_k(n,k):
     return math.factorial(n)/math.factorial(k)/math.factorial(n-k)
 
+# Downloads current NORAD Two-Line Element Sets for GPS
+def downloadTLE():
+    with open('./files/NORAD_TLE_GPS.txt', 'wb') as f:
+        f.write(elevationFile.content)
 
 def getElevationPath(path="", key="", samples="100", **elvtn_args):
       elvtn_args.update({
@@ -37,17 +42,6 @@ def getElevationPath(path="", key="", samples="100", **elvtn_args):
         elevationPathArray.append(resultset['elevation'])
 
       return elevationPathArray
-
-# Downloads current NORAD Two-Line Element Sets for GPS
-def downloadTLE():
-    url = 'http://celestrak.com/NORAD/elements/gps-ops.txt'
-    response = urllib2.urlopen(url)
-    with open('./files/NORAD_TLE_GPS.txt', 'w') as f: f.write(response.read())
-#        c = pycurl.Curl()
-#        c.setopt(c.URL, 'http://celestrak.com/NORAD/elements/gps-ops.txt')
-#        c.setopt(c.WRITEDATA, f)
-#        c.perform()
-#        c.close()
 
 # Loads a TLE file and creates a list of satellites
 def loadTLE(filename):
@@ -73,12 +67,11 @@ def getVisibleGPSSatellites(lat, lon, elev):
     nSat     = len(sat)
 
     rx      = ephem.Observer()
-    rx.elevation = elev
     rx.lat  = np.deg2rad(lat)
     rx.long = np.deg2rad(lon)
     rx.elevation = elev
     latlon    = str(lat) + "," + str(lon)
-   
+
     # Compute satellite locations at time = now and count visible satellites
     sat_alt, sat_az, sat_vis, sat_vis_flag = [], [], [], []
     vs = 0
@@ -107,7 +100,10 @@ def getVisibleGPSSatellites(lat, lon, elev):
             dEl.append(el - elev)
             az.append(np.rad2deg(np.arctan2((el - elev), dist[k])))
             k = k + 1
-        
+            print ("azimuth is " + str((np.rad2deg(np.arctan2((el - elev), dist[k])))))
+
+        print ("is this value " + str(np.rad2deg(biif1.alt)) + " greater than " + str(np.max(az)))
+
         if np.rad2deg(biif1.alt) > np.max(az):
             vs = vs + 1
             sat_vis.append(biif1)
@@ -116,28 +112,31 @@ def getVisibleGPSSatellites(lat, lon, elev):
                 too_low = too_low + 1.0
         else:
             sat_vis_flag.append(0)
-    
+
     by_satellite = ([{"sat_alt": altitude, "sat_az": azimuth, "sat_vis_flag": visibility}
                             for altitude, azimuth, visibility in zip(sat_alt, sat_az, sat_vis_flag)])
+
+    print(by_satellite)
 
     number_visible = sat_vis_flag.count(1)
 
     print (str(number_visible) + " are visible")
-    
+#    print by_satellite
+
     too_close = 0
+
     for i in range(0, number_visible):
         for j in range(i+1, number_visible):
             ang = float(repr(ephem.separation(sat_vis[i], sat_vis[j])))*180/ephem.pi
             if ephem.degrees(ang) < 30:
                 too_close = too_close + 1.0
-    
+
     s = n_choose_k(number_visible, 2)
     print str(s) + " is the nchoosek value"
-    too_close_metric = float(s-too_close)/s 
-    too_low_metric   = 1.0 - float(too_low/number_visible) 
-    constellation_quality = (too_close_metric + too_low_metric)/2.0           
+    too_close_metric = float(s-too_close)/s
+    too_low_metric   = 1.0 - float(too_low/number_visible)
+    constellation_quality = (too_close_metric + too_low_metric)/2.0
+
     print too_close_metric, too_low_metric
 
     return number_visible, by_satellite, constellation_quality
-
-

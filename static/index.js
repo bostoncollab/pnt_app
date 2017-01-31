@@ -1,6 +1,6 @@
 var map = Array.prototype.map;
 baseMarkerGroup = new L.LayerGroup();
-var mymap = L.map('mapid').setView([39.464559, -76.117401], 12);
+var mymap = L.map('mapid').setView([42.3601, -71.0589], 12);
 L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
     maxZoom: 18,
     id: 'rlove84.2mpf7b53',
@@ -13,14 +13,8 @@ var iconType1 = L.icon({
     iconSize: [32, 32],
 });
 
-var ip = document.location.hostname;
-if(ip == '52.205.68.66'){
-    console.log("Running AWS version")
-    var ipTarget = '52.205.68.66:5000';
-} else{
-    console.log("Running localhost version")
-    var ipTarget = 'localhost:5000'
-}
+var ipTarget = location.host
+
 var newMarker = null;
 
 function addMarker(e){
@@ -59,7 +53,7 @@ function onMapClick(e, data) {
 //	            "Elevation: " + String(data.elevation) + "<br>" + "No. Visible Satellites: " + String(data.no_visible_satellites))
 //    .openOn(mymap);
 }
-		
+
 function render(){
       var longitude = document.getElementById('longitude').value;
       var latitude = document.getElementById('latitude').value;
