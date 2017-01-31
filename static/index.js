@@ -1,15 +1,16 @@
 var map = Array.prototype.map;
 baseMarkerGroup = new L.LayerGroup();
 var mymap = L.map('mapid').setView([42.3601, -71.0589], 12);
-L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-    maxZoom: 18,
-    id: 'rlove84.2mpf7b53',
-    accessToken: 'pk.eyJ1IjoicmxvdmU4NCIsImEiOiJjaXk2ZW5wYnkwMDg1MzJwMWppc3Rqem15In0.JqdVvUdXZjAvwC20f7kanQ'
-}).addTo(mymap);
+// L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+//     maxZoom: 18,
+//     id: 'rlove84.2mpf7b53',
+//     accessToken: 'pk.eyJ1IjoicmxvdmU4NCIsImEiOiJjaXk2ZW5wYnkwMDg1MzJwMWppc3Rqem15In0.JqdVvUdXZjAvwC20f7kanQ'
+// }).addTo(mymap);
+L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}').addTo(mymap);
 mymap.on('click', addMarker);
 
 var iconType1 = L.icon({
-    iconUrl: './files/starIcon.png',
+    iconUrl: 'static/starIcon.png',
     iconSize: [32, 32],
 });
 

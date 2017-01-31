@@ -67,6 +67,7 @@ def getVisibleGPSSatellites(lat, lon, elev):
     nSat     = len(sat)
 
     rx      = ephem.Observer()
+    rx.elevation = elev
     rx.lat  = np.deg2rad(lat)
     rx.long = np.deg2rad(lon)
     rx.elevation = elev
@@ -100,9 +101,9 @@ def getVisibleGPSSatellites(lat, lon, elev):
             dEl.append(el - elev)
             az.append(np.rad2deg(np.arctan2((el - elev), dist[k])))
             k = k + 1
-            print ("azimuth is " + str((np.rad2deg(np.arctan2((el - elev), dist[k])))))
+            #print ("azimuth is " + str((np.rad2deg(np.arctan2((el - elev), dist[k])))))
 
-        print ("is this value " + str(np.rad2deg(biif1.alt)) + " greater than " + str(np.max(az)))
+        #print ("is this value " + str(np.rad2deg(biif1.alt)) + " greater than " + str(np.max(az)))
 
         if np.rad2deg(biif1.alt) > np.max(az):
             vs = vs + 1
@@ -116,7 +117,7 @@ def getVisibleGPSSatellites(lat, lon, elev):
     by_satellite = ([{"sat_alt": altitude, "sat_az": azimuth, "sat_vis_flag": visibility}
                             for altitude, azimuth, visibility in zip(sat_alt, sat_az, sat_vis_flag)])
 
-    print(by_satellite)
+    #print(by_satellite)
 
     number_visible = sat_vis_flag.count(1)
 

@@ -42,6 +42,7 @@ class LocationAPI(Resource):
     	# pass in a lat & long to the visible satellites query and get result
         visible_satellites, satellite_details, constellation_quality = getVisibleGPSSatellites(latitudevalue, latitudevalue, elevation_query_response)
 
+        global counter
         if counter % 1000 == 0:
             downloadTLE()
 
@@ -55,7 +56,6 @@ class LocationAPI(Resource):
     	return total_response
 
         # download the file if there have been atleast X calls without a download
-        global counter
         counter += 1
         # print "counter is %d" % counter
 
