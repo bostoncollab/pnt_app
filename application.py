@@ -40,7 +40,7 @@ class LocationAPI(Resource):
     	elevation_query_response = getElevation(querylocation) # get the elevation according to the queried location
 
     	# pass in a lat & long to the visible satellites query and get result
-        visible_satellites, satellite_details, constellation_quality = getVisibleGPSSatellites(latitudevalue, latitudevalue, elevation_query_response)
+        visible_satellites, satellite_details, constellation_quality = getVisibleGPSSatellites(latitudevalue, longitudevalue, elevation_query_response)
 
         global counter
         if counter % 1000 == 0:

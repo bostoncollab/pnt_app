@@ -1,6 +1,6 @@
 var map = Array.prototype.map;
 baseMarkerGroup = new L.LayerGroup();
-var mymap = L.map('mapid').setView([42.3601, -71.0589], 12);
+var mymap = L.map('mapid').setView([39.464559, -76.117401], 12);
 // L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
 //     maxZoom: 18,
 //     id: 'rlove84.2mpf7b53',

@@ -101,7 +101,7 @@ def getVisibleGPSSatellites(lat, lon, elev):
         for el in elevPath:
             dEl.append(el - elev)
             ang.append(np.rad2deg(np.arctan2((el - elev), dist[k])))
-            print "sat " + str(k) + " angle is " + str((np.rad2deg(np.arctan2((el - elev), dist[k]))))
+            print "sat " + str(k) + " angle is " + str((np.rad2deg(np.arctan2((el - elev), dist[k])))))
             k = k + 1
         #print ("is this value " + str(np.rad2deg(biif1.alt)) + " greater than " + str(np.max(az)))
 
