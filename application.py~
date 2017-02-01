@@ -38,12 +38,9 @@ class LocationAPI(Resource):
 
     	# pass in a lat & long to the elevation query and get result
     	elevation_query_response = getElevation(querylocation) # get the elevation according to the queried location
-        if elevation_query_response is None:
-            print "ELEVATION FAIL"
+
     	# pass in a lat & long to the visible satellites query and get result
         visible_satellites, satellite_details, constellation_quality = getVisibleGPSSatellites(latitudevalue, longitudevalue, elevation_query_response)
-        if visible_satellites is None:
-            print "VISIBLE SATELLITES FAIL"
 
         global counter
         if counter % 1000 == 0:

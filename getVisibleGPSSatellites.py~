@@ -32,14 +32,16 @@ def getElevationPath(path="", key="", samples="100", **elvtn_args):
         'samples': samples
       })
 
-      url = ELEVATION_BASE_URL + '?' + urllib.urlencode(elvtn_args)
-      response = simplejson.load(urllib.urlopen(url))
-
       # Create a dictionary for each results[] object
       elevationPathArray = []
 
-      for resultset in response['results']:
-        elevationPathArray.append(resultset['elevation'])
+      url = ELEVATION_BASE_URL + '?' + urllib.urlencode(elvtn_args)
+      response = simplejson.load(urllib.urlopen(url))
+      if response["status"] == "OK":
+          for resultset in response['results']:
+              elevationPathArray.append(resultset['elevation'])
+      else:
+          elevationPathArray= None
 
       return elevationPathArray
 
@@ -53,7 +55,7 @@ def loadTLE(filename):
         l3 = f.readline()
         sat = ephem.readtle(l1,l2,l3)
         satlist.append(sat)
-        print sat.name
+        #print sat.name
         l1 = f.readline()
 
     f.close()
@@ -87,13 +89,16 @@ def getVisibleGPSSatellites(lat, lon, elev):
         sat_alt.append(np.rad2deg(biif1.alt))
         sat_az.append( np.rad2deg(biif1.az ))
         frame = nv.FrameE(a=6378137, f=1.0/298.257)
-        pointA = frame.GeoPoint(latitude=lat, longitude=lon, degrees=True)
+        pointA = frame.GeoPoint(latitude=lat, longitude=lon, z=-elev, degrees=True)
         pointB, _azimuthb = pointA.geo_point(distance=5000, azimuth=np.rad2deg(biif1.az), degrees=True)
         latB, lonB = pointB.latitude_deg, pointB.longitude_deg
         latlonB = str(latB) + "," + str(lonB)
         pathStr = latlon + "|" + latlonB
         elevPath = getElevationPath(pathStr, myKey, 11)
-        elevPath = elevPath[1:]
+        if elevPath is None:
+            print "ELEVATIONPATH FAIL"
+        else:
+            elevPath = elevPath[1:]
         dist = range(500, 5500, 500)
         k = 0
         ang = []
@@ -101,7 +106,7 @@ def getVisibleGPSSatellites(lat, lon, elev):
         for el in elevPath:
             dEl.append(el - elev)
             ang.append(np.rad2deg(np.arctan2((el - elev), dist[k])))
-            print "sat " + str(k) + " angle is " + str((np.rad2deg(np.arctan2((el - elev), dist[k])))))
+            #print "dist " + str(k) + " angle is " + str((np.rad2deg(np.arctan2((el - elev), dist[k]))))
             k = k + 1
         #print ("is this value " + str(np.rad2deg(biif1.alt)) + " greater than " + str(np.max(az)))
 

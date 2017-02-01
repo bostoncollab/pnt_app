@@ -10,6 +10,9 @@ import simplejson
 import math
 
 ELEVATION_BASE_URL = 'https://maps.googleapis.com/maps/api/elevation/json'
+numberPointsElevationPath = 500
+distanceElevationPath     = 5000
+delDistance               = int(distanceElevationPath/numberPointsElevationPath)
 
 url = 'http://celestrak.com/NORAD/elements/gps-ops.txt'
 elevationFile = requests.get(url)
@@ -32,14 +35,16 @@ def getElevationPath(path="", key="", samples="100", **elvtn_args):
         'samples': samples
       })
 
-      url = ELEVATION_BASE_URL + '?' + urllib.urlencode(elvtn_args)
-      response = simplejson.load(urllib.urlopen(url))
-
       # Create a dictionary for each results[] object
       elevationPathArray = []
 
-      for resultset in response['results']:
-        elevationPathArray.append(resultset['elevation'])
+      url = ELEVATION_BASE_URL + '?' + urllib.urlencode(elvtn_args)
+      response = simplejson.load(urllib.urlopen(url))
+      if response["status"] == "OK":
+          for resultset in response['results']:
+              elevationPathArray.append(resultset['elevation'])
+      else:
+          elevationPathArray= None
 
       return elevationPathArray
 
@@ -53,7 +58,7 @@ def loadTLE(filename):
         l3 = f.readline()
         sat = ephem.readtle(l1,l2,l3)
         satlist.append(sat)
-        print sat.name
+        #print sat.name
         l1 = f.readline()
 
     f.close()
@@ -67,12 +72,11 @@ def getVisibleGPSSatellites(lat, lon, elev):
     print "Ephemeris data loaded."
     nSat     = len(sat)
 
-    rx      = ephem.Observer()
+    rx           = ephem.Observer()
     rx.elevation = elev
-    rx.lat  = np.deg2rad(lat)
-    rx.long = np.deg2rad(lon)
-    rx.elevation = elev
-    latlon    = str(lat) + "," + str(lon)
+    rx.lat       = np.deg2rad(lat)
+    rx.long      = np.deg2rad(lon)
+    latlon       = str(lat) + "," + str(lon)
 
     # Compute satellite locations at time = now and count visible satellites
     sat_alt, sat_az, sat_vis, sat_vis_flag = [], [], [], []
@@ -81,35 +85,39 @@ def getVisibleGPSSatellites(lat, lon, elev):
     date_time = datetime.datetime.now()
 
     rx.date = date_time
+    frame   = nv.FrameE(a=6378137, f=1.0/298.257)
+    pointA  = frame.GeoPoint(latitude=lat, longitude=lon, z=-elev, degrees=True)
+    dist = range(delDistance, (distanceElevationPath+delDistance), delDistance)
     for i in range(0, nSat):
         biif1 = sat[i]
         biif1.compute(rx)
         sat_alt.append(np.rad2deg(biif1.alt))
         sat_az.append( np.rad2deg(biif1.az ))
-        frame = nv.FrameE(a=6378137, f=1.0/298.257)
-        pointA = frame.GeoPoint(latitude=lat, longitude=lon, degrees=True)
-        pointB, _azimuthb = pointA.geo_point(distance=5000, azimuth=np.rad2deg(biif1.az), degrees=True)
+        if np.rad2deg(biif1.alt) < -30:
+            sat_vis_flag.append(0)
+            continue
+        pointB, _azimuthb = pointA.geo_point(distance=distanceElevationPath, azimuth=np.rad2deg(biif1.az), degrees=True)
         latB, lonB = pointB.latitude_deg, pointB.longitude_deg
         latlonB = str(latB) + "," + str(lonB)
         pathStr = latlon + "|" + latlonB
-        elevPath = getElevationPath(pathStr, myKey, 11)
-        elevPath = elevPath[1:]
-        dist = range(500, 5500, 500)
-        k = 0
-        ang = []
-        dEl = []
-        for el in elevPath:
-            dEl.append(el - elev)
-            ang.append(np.rad2deg(np.arctan2((el - elev), dist[k])))
-            print "sat " + str(k) + " angle is " + str((np.rad2deg(np.arctan2((el - elev), dist[k]))))
-            k = k + 1
-        #print ("is this value " + str(np.rad2deg(biif1.alt)) + " greater than " + str(np.max(az)))
+        elevPath = getElevationPath(pathStr, myKey, (numberPointsElevationPath+1))
+        if elevPath is None:
+            print "ELEVATIONPATH FAIL"
+        else:
+            elevPath = elevPath[1:]
+            k   = 0
+            ang = []
+            for el in elevPath:
+                ang.append(np.rad2deg(np.arctan2((el - elev), dist[k])))
+        #print "dist " + str(k) + " angle is " + str((np.rad2deg(np.arctan2((el - elev), dist[k]))))
+                k = k + 1
+    #print ("is this value " + str(np.rad2deg(biif1.alt)) + " greater than " + str(np.max(az)))
 
         if np.rad2deg(biif1.alt) > np.max(ang):
             vs = vs + 1
             sat_vis.append(biif1)
             sat_vis_flag.append(1)
-            if (np.rad2deg(biif1.alt)-np.max(ang)) < 15:
+            if (np.rad2deg(biif1.alt) - np.max(ang)) < 15:
                 too_low = too_low + 1.0
         else:
             sat_vis_flag.append(0)
