@@ -1,14 +1,6 @@
 var map = Array.prototype.map;
 baseMarkerGroup = new L.LayerGroup();
 var mymap = L.map('mapid').setView([39.464559, -76.117401], 12);
-<<<<<<< HEAD
-=======
-// L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-//     maxZoom: 18,
-//     id: 'rlove84.2mpf7b53',
-//     accessToken: 'pk.eyJ1IjoicmxvdmU4NCIsImEiOiJjaXk2ZW5wYnkwMDg1MzJwMWppc3Rqem15In0.JqdVvUdXZjAvwC20f7kanQ'
-// }).addTo(mymap);
->>>>>>> 1d83b36a623c48cdaab6cae65337851d0a30809a
 L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}').addTo(mymap);
 mymap.on('click', addMarker);
 
@@ -24,7 +16,7 @@ var newMarker = null;
 function addMarker(e){
   var clickLat = e.latlng.lat;
   var clickLng = e.latlng.lng;
-  $.get('http://' + ipTarget + '/data?longitude=' + clickLng + '&latitude=' + clickLat, (data) => {
+  $.get('http://' + ipTarget + ':5000/data?longitude=' + clickLng + '&latitude=' + clickLat, (data) => {
 if(newMarker != null){
   newMarker.remove();
   console.log("Removing");
