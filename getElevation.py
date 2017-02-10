@@ -12,9 +12,9 @@ def getElevation(locations, key="", **elvtn_args):
     url = ELEVATION_BASE_URL + '?' + urllib.urlencode(elvtn_args)
     response = simplejson.load(urllib.urlopen(url))
     if response["status"] == "OK":
-        elevation_reading = response["results"][0]["elevation"]
+        elevationReading = response["results"][0]["elevation"]
         pprint.pprint(response)
     else:
-        elevation_reading = None
-    # return a single elevation reading
-    return elevation_reading
+        elevationReading = None
+    # Return a single elevation reading
+    return elevationReading
