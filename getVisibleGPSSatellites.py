@@ -10,7 +10,7 @@ import simplejson
 import math
 
 ELEVATION_BASE_URL = 'https://maps.googleapis.com/maps/api/elevation/json'
-numberPointsElevationPath = 500
+numberPointsElevationPath = 5
 distanceElevationPath     = 5000
 delDistance               = int(distanceElevationPath/numberPointsElevationPath)
 

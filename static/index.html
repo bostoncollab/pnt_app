@@ -1,23 +1,48 @@
 <!DOCTYPE html>
-<html>
-  <script
-src="static/jquery-3.1.1.min.js">
-</script>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PNT Signal Assurance</title>
+  <!-- import style sheets -->
   <link rel="stylesheet" href="static/leaflet.css" />
   <link rel="stylesheet" href="static/styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/flatpickr/dist/flatpickr.min.css">
+  <!-- import Bootstrap CSS-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+</head>
 
 <body>
-
-  <div id="mapid"></div>
-  <p id="demo"></p>
-
-  <input type=number id="latitude"/> Latitude<br>
-  <input type=number id="longitude"/> Longitude<br>
-  <br>
-  <button onClick="render()">Zoom To</button>
-
+  <div class="page-header">
+    <h1>PNT Signal Assurance</h1>
+  </div>
+  <div class="btn-group" role="group" aria-label="...">
+    <button type="button" class="btn btn-default">Open Space</button>
+    <button type="button" class="btn btn-default">Forest</button>
+    <button type="button" class="btn btn-default">Jungle</button>
+    <button type="button" class="btn btn-default">Suburban</button>
+    <button type="button" class="btn btn-default">Urban</button>
+  </div>
+  <div id="mapid">
+  </div>
+  <div class = "inputforms">
+    <br><input type=number id="latitude"/> Latitude<br>
+    <input type=number id="longitude"/> Longitude<br>
+    <input class="mycalendar" placeholder="Select Date and Time"/>
+    <button onClick="render()">Zoom To</button>
+  </div>
+  <script id="__bs_script__">//<![CDATA[
+    document.write("<script async src='http://HOST:3000/browser-sync/browser-sync-client.js?v=2.18.7'><\/script>".replace("HOST", location.hostname));
+//]]></script>
 </body>
-
-<script src="static/leaflet.js"></script>
-<script src="static/index.js"></script>
+  <!-- import JS-->
+  <script src="static/leaflet.js"></script>
+  <script src="static/index.js"></script>
+  <script src="static/jquery-3.1.1.min.js"></script>
+  <script src="https://unpkg.com/flatpickr"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </html>
+<style>
+</style>

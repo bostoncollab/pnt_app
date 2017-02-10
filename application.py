@@ -2,6 +2,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from flask_restful import Resource, Api
 from werkzeug.exceptions import BadRequest
+from werkzeug.contrib.profiler import ProfilerMiddleware
 
 from getElevation import getElevation
 from getVisibleGPSSatellites import downloadTLE, getVisibleGPSSatellites
@@ -67,5 +68,7 @@ api.add_resource(LocationAPI, '/data')
 api.add_resource(Ping, '/ping')
 api.add_resource(About, '/about')
 
+application.config['PROFILE'] = True
+application.wsgi_app = ProfilerMiddleware(application.wsgi_app, restrictions=[10])
 if __name__ == '__main__':
     application.run()
