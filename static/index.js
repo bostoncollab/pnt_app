@@ -1,22 +1,24 @@
 var map = Array.prototype.map;
 baseMarkerGroup = new L.LayerGroup();
 var mymap = L.map('mapid').setView([39.464559, -76.117401], 12);
+<<<<<<< HEAD
+=======
+// L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+//     maxZoom: 18,
+//     id: 'rlove84.2mpf7b53',
+//     accessToken: 'pk.eyJ1IjoicmxvdmU4NCIsImEiOiJjaXk2ZW5wYnkwMDg1MzJwMWppc3Rqem15In0.JqdVvUdXZjAvwC20f7kanQ'
+// }).addTo(mymap);
+>>>>>>> 1d83b36a623c48cdaab6cae65337851d0a30809a
 L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}').addTo(mymap);
 mymap.on('click', addMarker);
 
 var iconType1 = L.icon({
-    iconUrl: './files/starIcon.png',
+    iconUrl: 'static/starIcon.png',
     iconSize: [32, 32],
 });
 
-var ip = document.location.hostname;
-if(ip == '52.205.68.66'){
-    console.log("Running AWS version")
-    var ipTarget = '52.205.68.66:5000';
-} else{
-    console.log("Running localhost version")
-    var ipTarget = 'localhost:5000'
-}
+var ipTarget = location.host
+
 var newMarker = null;
 
 function addMarker(e){
@@ -55,7 +57,7 @@ function onMapClick(e, data) {
 //	            "Elevation: " + String(data.elevation) + "<br>" + "No. Visible Satellites: " + String(data.no_visible_satellites))
 //    .openOn(mymap);
 }
-		
+
 function render(){
       var longitude = document.getElementById('longitude').value;
       var latitude = document.getElementById('latitude').value;
