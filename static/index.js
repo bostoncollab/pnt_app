@@ -23,12 +23,12 @@ if(newMarker != null){
 }
 var newMarker = L.marker(e.latlng, {icon:iconType1}).addTo(mymap)
                 .bindPopup("Latitude: " + String(e.latlng.lat.toFixed(6)) + "<br>" + "Longitude: " + String(e.latlng.lng.toFixed(6)) + "<br>" +
-                    "Elevation: " + String(data.elevation.toFixed(2)) + "<br>" + "No. Visible Satellites: " + String(data.no_visible_satellites) + "<br>" + "Constellation Quality: " + String(data.constellation_quality.toFixed(3))).openPopup();
+                    "Elevation: " + String(data.elevation.toFixed(2)) + "<br>" + "No. Visible Satellites: " + String(data.numberVisibleSatellites) + "<br>" + "Constellation Quality: " + String(data.constellationQuality.toFixed(3))).openPopup();
       console.log(data);
-      result = data.satellite_details;
-      var sat_alt = map.call(result, (v) => (v.sat_alt));
+      result = data.satelliteDetails;
+      var satAlt = map.call(result, (v) => (v.satAlt));
 //      document.getElementById("demo").innerHTML = sat_alt;
-      console.log(sat_alt);
+      console.log(satAlt);
 //	  onMapClick(e, data);
   });
   console.log(clickLat);
@@ -56,11 +56,11 @@ function render(){
       mymap.panTo(new L.LatLng(latitude, longitude));
       mymap.setZoom(10);
 
-      $.get('http://' + ipTarget + '/data?longitude=' + longitude + '&latitude=' + latitude, (data) => {
+      $.get('http://' + ipTarget + '5000/data?longitude=' + longitude + '&latitude=' + latitude, (data) => {
           console.log(data);
-          result = data.satellite_details;
-          var sat_alt = map.call(result, (v) => (v.sat_alt));
+          result = data.satelliteDetails;
+          var satAlt = map.call(result, (v) => (v.satAlt));
 //          document.getElementById("demo").innerHTML = sat_alt;
-          console.log(sat_alt);
+          console.log(satAlt);
     });
 }

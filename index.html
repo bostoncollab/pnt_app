@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html>
-  <script
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>PNT Signal Assurance Tool</title>
+<link rel="stylesheet" href="static/leaflet.css" />
+<link rel="stylesheet" href="static/styles.css" />
+<link rel="stylesheet" href="static/flatpickr.min.css" />
+</head>
+<script
 src="static/jquery-3.1.1.min.js">
+</script>
+<script src="static/flatpickr.js">
 </script>
   <link rel="stylesheet" href="static/leaflet.css" />
   <link rel="stylesheet" href="static/styles.css" />
-
 <body>
 
   <div id="mapid"></div>
@@ -15,7 +23,13 @@ src="static/jquery-3.1.1.min.js">
   <input type=number id="longitude"/> Longitude<br>
   <br>
   <button onClick="render()">Zoom To</button>
-
+  <br>
+  <br>
+  <input class="flatpickr" type="text" placeholder="Select Date..">
+  <script>flatpickr(".flatpickr", {
+	     enableTime: true
+          });
+</script>
 </body>
 
 <script src="static/leaflet.js"></script>

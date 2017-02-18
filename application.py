@@ -52,9 +52,9 @@ class LocationAPI(Resource):
         totalResponse = {'latitude':   latitudeString,
    		         'longitude':  longitudeString,
   		         'elevation':  elevationQueryResponse,
-                         'satellite_details': satelliteDetails,
-                         'no_visible_satellites': visibleSatellites,
-                         'constellation_quality': constellationQuality}
+                         'satelliteDetails': satelliteDetails,
+                         'numberVisibleSatellites': visibleSatellites,
+                         'constellationQuality': constellationQuality}
     	return totalResponse
 
         # Download the file if there have been at least X calls without a download
