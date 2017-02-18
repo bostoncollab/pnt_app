@@ -1,37 +1,121 @@
 <!DOCTYPE html>
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>PNT Signal Assurance Tool</title>
-<link rel="stylesheet" href="static/leaflet.css" />
-<link rel="stylesheet" href="static/styles.css" />
-<link rel="stylesheet" href="static/flatpickr.min.css" />
-</head>
-<script
-src="static/jquery-3.1.1.min.js">
-</script>
-<script src="static/flatpickr.js">
-</script>
-  <link rel="stylesheet" href="static/leaflet.css" />
-  <link rel="stylesheet" href="static/styles.css" />
-<body>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>PNT Signal Assurance Tool</title>
+    <link rel="stylesheet" href="static/leaflet.css" />
+    <link rel="stylesheet" href="static/flatpickr.min.css" />
+    <link rel="stylesheet" href="static/crispTable.css" type="text/css" />
+    <link rel="stylesheet" href="static/leaflet.css" />
+    <link rel="stylesheet" href="static/styles.css" />
+  </head>
+  <script src="static/jquery-3.1.1.min.js"></script>
+  <script src="static/flatpickr.js"></script>
+  <style>
+    .indoors * {
+    align: left;
+    }
+    .outdoors * {
+    align: left;
+    }
+  </style>
+  <body>
 
-  <div id="mapid"></div>
-  <p id="demo"></p>
-
-  <input type=number id="latitude"/> Latitude<br>
-  <input type=number id="longitude"/> Longitude<br>
-  <br>
-  <button onClick="render()">Zoom To</button>
-  <br>
-  <br>
-  <input class="flatpickr" type="text" placeholder="Select Date..">
-  <script>flatpickr(".flatpickr", {
-	     enableTime: true
-          });
-</script>
-</body>
-
-<script src="static/leaflet.js"></script>
-<script src="static/index.js"></script>
+    <div id="mapid"></div>
+    <p id="demo"></p>
+    <table>
+      <tr>
+	<td valign="top" colspan="2">
+	  Specific location:
+	</td>
+	<td valign="top">
+	  Date/time:<br>
+	</td>
+	<td valign="top">
+	  Indoors/outdoors:<br>
+	</td>
+	<td valign="top">
+	  Specify environment:<br>
+	</td>
+	<td valign="top">
+	  Jamming level:<br>
+	</td>
+	<td valign="top">
+	  Spoofing level:<br>
+	</td>
+      </tr>
+      <tr>
+	<td valign="top">
+	  Latitude: <br>
+	  Longitude: <br>
+	</td>
+	<td valign="top">
+	  <input type=number id="latitude"/><br>
+	  <input type=number id="longitude"/><br>
+	  <button onClick="goto()">Go There</button>
+	</td>
+	<td valign="top">
+	  <input class="flatpickr" type="text" placeholder=" Pick date/time ...">
+	  <script>flatpickr(".flatpickr", {
+	    enableTime: true}
+	    );
+	  </script>
+	</td>
+	<td valign="top">
+	  <div>
+	    <form action="">
+	    <input type="radio" name="inout" id="indoors"  value="in">Indoors<br>
+	    <input type="radio" name="inout" id="outdoors" value="out" checked>Outdoors
+	    </form>
+	  </div>
+	</td>
+	<td valign="top">
+	  <div>
+	    <select id="env-list">
+	      <option value="0">Urban</option> 
+	      <option value="1">Suburban</option> 
+	      <option value="2">Desert</option>
+	      <option value="3">Forest/Jungle</option> 
+	      <option value="4">Rural</option>
+	      <option value="5">Rocky</option>
+	    </select>
+	    <script>$( 'option[value="0"]' ).prop( 'selected', 'selected' );</script>
+	  </div>
+	</td>
+	<td valign="top">
+      	  <div>
+	    <select id="jam-list">
+	      <option value="0">None</option> 
+	      <option value="1">Low</option> 
+	      <option value="2">Medium</option>
+	      <option value="3">High</option> 
+	    </select>
+	    <script>$( 'option[value="0"]' ).prop( 'selected', 'selected' );</script>
+	  </div>
+	</td>
+	<td valign="top">
+      	  <div>
+	    <select id="spoof-list">
+	      <option value="0">None</option> 
+	      <option value="1">Low</option> 
+	      <option value="2">Medium</option>
+	      <option value="3">High</option> 
+	    </select>
+	    <script>$( 'option[value="0"]' ).prop( 'selected', 'selected' );</script>
+	  </div>
+	</td>
+	<td valign="middle">
+	  <img src="static/pmpnt.png" width="200px">
+	</td>
+      </tr>
+      <tr>
+	<td colspan="8">
+	  <button onClick="run()">Run</button>
+	</td>
+      </tr>     
+    </table>
+  </body>
+  
+  <script src="static/leaflet.js"></script>
+  <script src="static/index.js"></script>
 </html>
