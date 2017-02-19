@@ -13,11 +13,16 @@ var popup = L.popup();
 
 var ipTarget = location.host
 // for laptop, uncomment below
-//ipTarget = "localhost"
+ipTarget = "localhost"
 
 var newReceiver = null;
 var receiverLon =  39.464559; //default
 var receiverLat = -76.117401; //default
+var inputDateSring = new Date().format('Y-m-d H:i');
+var env      = "o"
+var surround = "u"
+var jam      = "n"
+var spoof    = "n"
 
 function addMarker(e){
     var clickLat = e.latlng.lat;
@@ -26,20 +31,6 @@ function addMarker(e){
 	newMarker.remove();
 	console.log("Removing old marker");
     }
-    //$.get('http://' + ipTarget + ':5000/data?longitude=' + clickLng + '&latitude=' + clickLat, (data) => {
-    //	newMarker = L.marker(e.latlng, {icon:iconType1}).addTo(mymap)
-    //        .bindPopup("Latitude: " + String(e.latlng.lat.toFixed(6)) + "<br>" + "Longitude: " + String(e.latlng.lng.toFixed(6)) + "<br>" +
-    //                   "Elevation: " + String(data.elevation.toFixed(2)) + "<br>" + "No. Visible Satellites: " + String(data.numberVisibleSatellites) +
-    //	 	       "<br>" + "Constellation Quality: " + String(data.constellationQuality.toFixed(3))).openPopup();
-	// console.log(data);
-	//result = data.satelliteDetails;
-	//var satAlt = map.call(result, (v) => (v.satAlt));
-	//      document.getElementById("demo").innerHTML = sat_alt;
-	// console.log(satAlt);
-	//	  onMapClick(e, data);
-  //});
-  //  console.log(clickLat);
-  //  console.log(clickLng);
     mymap.panTo(new L.LatLng(clickLat, clickLng));
 }
 
@@ -53,21 +44,28 @@ function addReceiver(e){
     }
     onMapClick(e);
     newReceiver = L.marker(e.latlng, {icon:iconType1}).addTo(mymap)
-//    $.get('http://' + ipTarget + ':5000/data?longitude=' + clickLng + '&latitude=' + clickLat, (data) => {
-//	newReceiver = L.marker(e.latlng, {icon:iconType1}).addTo(mymap)
-//            .bindPopup("Latitude: " + String(e.latlng.lat.toFixed(6)) + "<br>" + "Longitude: " + String(e.latlng.lng.toFixed(6)) + "<br>" +
-//                       "Elevation: " + String(data.elevation.toFixed(2)) + "<br>" + "No. Visible Satellites: " + String(data.numberVisibleSatellites) +
-//		       "<br>" + "Constellation Quality: " + String(data.constellationQuality.toFixed(3))).openPopup();
-	// console.log(data);
-//	result = data.satelliteDetails;
-//	var satAlt = map.call(result, (v) => (v.satAlt));
-	//      document.getElementById("demo").innerHTML = sat_alt;
-	// console.log(satAlt);
-	//	  onMapClick(e, data);
-//  });
-//    console.log(clickLat);
-//    console.log(clickLng);
     mymap.panTo(new L.LatLng(receiverLat, receiverLon));
+}
+
+
+function get_date(){
+    inputDateString = document.getElementById('calendar').value;
+    console.log(inputDateString);
+}
+
+
+function get_param(){
+    var foo = document.getElementById('env-buttons');
+    var env = foo.value;
+    var foo = document.getElementById('surround-list');
+    var sur = foo.options[foo.selectedIndex].value;
+    var foo = document.getElementById('jam-list');
+    var jam = foo.options[foo.selectedIndex].value;
+    var foo = document.getElementById('spoof-list');
+    var spf = foo.options[foo.selectedIndex].value;
+    
+    console.log(env + ":" + sur + ":" + jam + ":" + spf)
+    return env + ":" + sur + ":" + jam + ":" + spf
 }
 
 
@@ -80,17 +78,26 @@ function goto(){
 
 
 function run(){
-    console.log(receiverLat);
-    $.get('http://' + ipTarget + ':5000/data?longitude=' + receiverLon + '&latitude=' + receiverLat, (data) => {
-	newReceiver.bindPopup("Latitude: " + String(receiverLat.toFixed(6)) + "<br>" + "Longitude: " + String(receiverLon.toFixed(6)) + "<br>" +
-			       "Elevation: " + String(data.elevation.toFixed(2)) + "<br>" + "No. Visible Satellites: " + String(data.numberVisibleSatellites) +
-			       "<br>" + "Constellation Quality: " + String(data.constellationQuality.toFixed(3))).openPopup();
-        console.log(data);
-        result = data.satelliteDetails;
-        var satAlt = map.call(result, (v) => (v.satAlt));
-	//          document.getElementById("demo").innerHTML = sat_alt;
-        console.log(satAlt);
-    });
+    if(newReceiver == null){
+	alert("No receiver positioned.")
+	return;
+    }
+    get_date();
+    foo = inputDateString.split(" ")
+    date = foo[0]
+    time = foo[1]
+    paramCode = get_param();
+    $.get('http://' + ipTarget + ':5000/data?longitude=' + receiverLon + '&latitude=' + receiverLat + '&date=' + date + "&time=" + time + "&param=" + 
+	  paramCode, (data) => {
+	      newReceiver.bindPopup("Latitude: " + String(receiverLat.toFixed(6)) + " deg<br>" + "Longitude: " + String(receiverLon.toFixed(6)) + " deg<br>" +
+				    "Elevation: " + String(data.elevation.toFixed(2)) + " m<br>" + "Datetime: " + inputDateString + "<br>" +
+				    "No. Visible Satellites: " + String(data.numberVisibleSatellites) +
+				    "<br>" + "Constellation Quality: " + String(data.constellationQuality.toFixed(3))).openPopup();
+              console.log(data);
+              result = data.satelliteDetails;
+              var satAlt = map.call(result, (v) => (v.satAlt));
+              console.log(satAlt);
+	  });
 }
 
 
@@ -99,9 +106,4 @@ function onMapClick(e) {
   var clickLng = e.latlng.lng;
   console.log(clickLat);
   console.log(clickLng);
-//  popup
-//      .setLatLng(e.latlng)
-//      .setContent("Latitude: " + String(e.latlng.lat) + "<br>" + "Logintude: " + String(e.latlng.lng) + "<br>" +
-//                  "Elevation: " + String(data.elevation) + "<br>" + "No. Visible Satellites: " + String(data.no_visible_satellites))
-//    .openOn(mymap);
 }

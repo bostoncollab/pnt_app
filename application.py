@@ -5,6 +5,7 @@ from werkzeug.exceptions import BadRequest
 
 from getElevation import getElevation
 from getVisibleGPSSatellites import downloadTLE, getVisibleGPSSatellites
+from getEnvironmentalEffects import getEnvEffects
 
 application = Flask(__name__)
 CORS(application)
@@ -29,18 +30,22 @@ class LocationAPI(Resource):
     def get(self):
     	latitudeString  = request.args.get('latitude')
     	longitudeString = request.args.get('longitude')
-        if not latitudeString or not longitudeString:
-            raise BadRequest('Must pass latitude and longitude')
+        dateString      = request.args.get('date')
+        timeString      = request.args.get('time')
+        param           = request.args.get('param')
+        if not latitudeString or not longitudeString or not dateString or not timeString:
+            raise BadRequest('Must pass latitude and longitude and a datetime')
         latitudeValue  = float(latitudeString)
         longitudeValue = float(longitudeString)
     	queryLocation  =  '%s,%s' %(latitudeString, longitudeString)
-
+        
     	# Pass in a lat & long to the elevation query and get result
     	elevationQueryResponse = getElevation(queryLocation) # get the elevation according to the queried location
         if elevationQueryResponse is None:
             print "ELEVATION FAIL"
     	# Pass in a lat & long to the visible satellites query and get result
-        visibleSatellites, satelliteDetails, constellationQuality = getVisibleGPSSatellites(latitudeValue, longitudeValue, elevationQueryResponse)
+        visibleSatellites, satelliteDetails, constellationQuality = getVisibleGPSSatellites(latitudeValue, longitudeValue,
+                                                                                            elevationQueryResponse, dateString, timeString)
         if visibleSatellites is None:
             print "VISIBLE SATELLITES FAIL"
 
@@ -48,10 +53,14 @@ class LocationAPI(Resource):
         if counter % 1000 == 0:
             downloadTLE()
 
+        env = getEnvEffects(param)
+
         # Compile JSON
         totalResponse = {'latitude':   latitudeString,
    		         'longitude':  longitudeString,
   		         'elevation':  elevationQueryResponse,
+                         'date':       dateString,
+                         'time':       timeString,
                          'satelliteDetails': satelliteDetails,
                          'numberVisibleSatellites': visibleSatellites,
                          'constellationQuality': constellationQuality}

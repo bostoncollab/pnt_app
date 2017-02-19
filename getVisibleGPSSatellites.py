@@ -10,7 +10,7 @@ import simplejson
 import math
 
 ELEVATION_BASE_URL        = 'https://maps.googleapis.com/maps/api/elevation/json'
-numberPointsElevationPath = 500
+numberPointsElevationPath = 50
 distanceElevationPath     = 5000
 delDistance               = int(distanceElevationPath/numberPointsElevationPath)
 
@@ -23,10 +23,12 @@ myKey = "AIzaSyAZgMQ6edjbiq3hO5Aq2XhWO5bo0Ot2nfE"
 def n_choose_k(n,k):
     return math.factorial(n)/math.factorial(k)/math.factorial(n-k)
 
+
 # Downloads current NORAD Two-Line Element Sets for GPS
 def downloadTLE():
     with open('./files/NORAD_TLE_GPS.txt', 'wb') as f:
         f.write(elevationFile.content)
+
 
 def getElevationPath(path="", key="", samples="100", **elvtn_args):
       elvtn_args.update({
@@ -48,6 +50,7 @@ def getElevationPath(path="", key="", samples="100", **elvtn_args):
 
       return elevationPathArray
 
+
 # Loads a TLE file and creates a list of satellites
 def loadTLE(filename):
     f = open(filename)
@@ -66,7 +69,7 @@ def loadTLE(filename):
     return satlist
 
 
-def getVisibleGPSSatellites(lat, lon, elev):
+def getVisibleGPSSatellites(lat, lon, elev, date, time):
     filename = './files/NORAD_TLE_GPS.txt'
     sat      = loadTLE(filename)
     print "Ephemeris data loaded."
@@ -82,7 +85,14 @@ def getVisibleGPSSatellites(lat, lon, elev):
     satAlt, satAz, satVis, satVisFlag = [], [], [], []
     vs = 0
     tooLow = 0
-    dateTime = datetime.datetime.now()
+    foo    = date.split("-")
+    year   = int(foo[0])
+    month  = int(foo[1])
+    day    = int(foo[2])
+    foo    = time.split(":")
+    hour   = int(foo[0])
+    minute = int(foo[1])
+    dateTime = datetime.datetime(year, month, day, hour, minute)
 
     rx.date = dateTime
     frame   = nv.FrameE(a=6378137, f=1.0/298.257)
@@ -127,25 +137,29 @@ def getVisibleGPSSatellites(lat, lon, elev):
 
     #print(by_satellite)
 
-    numberVisible = satVisFlag.count(1)
+    nV = satVisFlag.count(1)
 
-    print (str(numberVisible) + " are visible")
+    print (str(nV) + " are visible")
 #    print by_satellite
 
     tooClose = 0
 
-    for i in range(0, numberVisible):
-        for j in range(i+1, numberVisible):
+    for i in range(0, nV):
+        for j in range(i+1, nV):
             ang = float(repr(ephem.separation(satVis[i], satVis[j])))*180/ephem.pi
             if ephem.degrees(ang) < 30:
                 tooClose = tooClose + 1.0
 
-    s = n_choose_k(numberVisible, 2)
+    s = n_choose_k(nV, 2)
     print str(s) + " is the nchoosek value"
-    tooCloseMetric  = float(s-tooClose)/s
-    tooLowMetric = 1.0 - float(tooLow/numberVisible)
+    f = 10.0/nV
+    tooClose = tooClose * f
+    tooLow   = tooLow   * f
+    print str(tooClose), str(tooLow)
+    tooCloseMetric  = float(( s - (tooClose/ s))/ s)
+    tooLowMetric    = float((nV - (tooLow  /nV))/nV)
     constellationQuality = (tooCloseMetric + tooLowMetric)/2.0
 
     print tooCloseMetric, tooLowMetric
 
-    return numberVisible, bySatellite, constellationQuality
+    return nV, bySatellite, constellationQuality
