@@ -54,6 +54,7 @@ class LocationAPI(Resource):
             downloadTLE()
 
         env = getEnvEffects(param)
+        accuracy = env*constellationQuality
 
         # Compile JSON
         totalResponse = {'latitude':   latitudeString,
@@ -63,7 +64,10 @@ class LocationAPI(Resource):
                          'time':       timeString,
                          'satelliteDetails': satelliteDetails,
                          'numberVisibleSatellites': visibleSatellites,
-                         'constellationQuality': constellationQuality}
+                         'constellationQuality': constellationQuality,
+                         'environment': env,
+                         'accuracy': accuracy}
+
     	return totalResponse
 
         # Download the file if there have been at least X calls without a download
