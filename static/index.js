@@ -87,12 +87,13 @@ function run(){
     date = foo[0]
     time = foo[1]
     paramCode = get_param();
+    newReceiver.closePopup();
     $.get('http://' + ipTarget + ':5000/data?longitude=' + receiverLon + '&latitude=' + receiverLat + '&date=' + date + "&time=" + time + "&param=" + 
 	  paramCode, (data) => {
-	      newReceiver.bindPopup("Latitude: " + String(receiverLat.toFixed(6)) + " deg<br>" + "Longitude: " + String(receiverLon.toFixed(6)) + " deg<br>" +
+	      newReceiver.bindPopup("<b>Signal Summary</b><br>" + "Latitude: " + String(receiverLat.toFixed(6)) + " deg<br>" + "Longitude: " + String(receiverLon.toFixed(6)) + " deg<br>" +
 				    "Elevation: " + String(data.elevation.toFixed(2)) + " m<br>" + "Datetime: " + inputDateString + "<br>" +
 				    "No. Visible Satellites: " + String(data.numberVisibleSatellites) +
-				    "<br>" + "Constellation Quality: " + String(data.constellationQuality.toFixed(3))).openPopup();
+				    "<br>" + "Constellation Quality: " + String(data.constellationQuality.toFixed(3)) + "<br>Accuracy Metric:" + String(data.accuracy.toFixed(2))).openPopup();
               console.log(data);
               result = data.satelliteDetails;
               var satAlt = map.call(result, (v) => (v.satAlt));
