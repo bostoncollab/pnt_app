@@ -16,6 +16,7 @@ var ipTarget = location.host
 //ipTarget = "localhost"
 
 var newReceiver = null;
+var dummt       = null;
 var receiverLon =  39.464559; //default
 var receiverLat = -76.117401; //default
 var inputDateSring = new Date().format('Y-m-d H:i');
@@ -87,7 +88,7 @@ function run(){
     date = foo[0]
     time = foo[1]
     paramCode = get_param();
-    newReceiver.closePopup();
+    newReceiver.bindPopup("Processing ... results forthcoming.").openPopup();
     $.get('http://' + ipTarget + ':5000/data?longitude=' + receiverLon + '&latitude=' + receiverLat + '&date=' + date + "&time=" + time + "&param=" + 
 	  paramCode, (data) => {
 	      newReceiver.bindPopup("<b>Signal Summary</b><br>" + "Latitude: " + String(receiverLat.toFixed(6)) + " deg<br>" + "Longitude: " + String(receiverLon.toFixed(6)) + " deg<br>" +

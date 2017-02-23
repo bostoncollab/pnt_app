@@ -9,7 +9,7 @@ def getEnvEffects(param):
     p = param.split(":")
     
     if p[0] == 'i':
-        factor1 = 0.5
+        factor1 = 0.6
     elif p[0] == 'o':
         factor1 = 1.0
     elif p[0] == 'u':
@@ -18,13 +18,13 @@ def getEnvEffects(param):
         factor1 = 0.0
         
     if p[1] == 'u':
-        factor2 = 0.66
+        factor2 = 0.75
     elif p[1] == 's':
         factor2 = 1.0
     elif p[1] == 'd':
         factor2 = 1.0
     elif p[1] == 'f':
-        factor2 = 0.85
+        factor2 = 0.9
     elif p[1] == 'r':
         factor2 = 1.0
     else:
@@ -33,20 +33,20 @@ def getEnvEffects(param):
     if p[2] == 'n':
         factor3 = 1.0
     elif p[2] == 'l':
-        factor3 = 0.75
+        factor3 = 0.8
     elif p[2] == 'm':
-        factor3 = 0.5
+        factor3 = 0.6
     else:
-        factor3 = 0.25
+        factor3 = 0.4
 
     if p[3] == 'n':
         factor4 = 1.0
     elif p[3] == 'l':
-        factor4 = 0.75
+        factor4 = 0.8
     elif p[3] == 'm':
-        factor4 = 0.5
+        factor4 = 0.6
     else:
-        factor4 = 0.25
+        factor4 = 0.4
     
     f = factor1 * factor2 * factor3 * factor4
 
