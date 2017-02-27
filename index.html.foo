@@ -1,38 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>PNT Signal Assurance Tool</title>
-    <link rel="stylesheet" href="static/leaflet.css"/>
-    <link rel="stylesheet" href="static/flatpickr.min.css"/>
-    <link rel="stylesheet" href="static/crispTable.css" type="text/css"/>
-    <link rel="stylesheet" href="static/leaflet.css"/>
-    <link rel="stylesheet" href="static/styles.css"/>
-    <link rel="stylesheet" href="static/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="static/leaflet.css" />
+    <link rel="stylesheet" href="static/flatpickr.min.css" />
+    <link rel="stylesheet" href="static/crispTable.css" type="text/css" />
+    <link rel="stylesheet" href="static/leaflet.css" />
+    <link rel="stylesheet" href="static/styles.css" />
   </head>
 
   <script src="static/jquery-3.1.1.min.js"></script>
   <script src="static/flatpickr.js"></script>
-  <script src="static/jquery-ui.js"></script>
-
-  <script>
-    $( function() {
-    $( "#dialog" ).dialog({
-      autoOpen: false,
-      position: { my: "left+100 bottom-10", at: "top right", of: "#opener"},
-      closeText: "",
-      show: {
-        effect: "blind",
-        duration: 500
-      },
-      hide: {
-        duration: 500
-      }
-    });
-  } );
-  </script>
-
+  
   <script>
     function setValue(id, newValue) {
     var s = document.getElementById(id);
@@ -51,47 +31,42 @@
 
   <body>
 
-    <div id="dialog" title="Error">
-      <p>Please position a receiver with the mouse first.</p>
-    </div>
-    
     <div id="env-buttons"></div>
-    <div id="mapid" style="height:70vh"></div>
-    <p id="demo"></p>
+    <div id="mapid"</div>
+    <p id="demo"</p>
+
     <table>
       <tr>
 	<td valign="top" colspan="2">
 	  Specific location:
 	</td>
-	<td valign="top" style="width:10%">
+	<td valign="top">
 	  Date/time (UTC):<br>
 	</td>
-	<td valign="top" style="width:12%">
+	<td valign="top">
 	  Environment:<br>
 	</td>
-	<td valign="top" style="width:10%">
+	<td valign="top">
 	  Surroundings:<br>
 	</td>
-	<td valign="top" style="width:10%">
+	<td valign="top">
 	  Jamming level:<br>
 	</td>
-	<td valign="top" style="width:10%">
+	<td valign="top">
 	  Spoofing level:<br>
-	</td>
-	<td valign="top" style="width:15%" rowspan="2">
-	  <img src="static/pmpnt.png" width="100%">
-	  <p style="font-size:20px; font-family:Times; color:#39B64A">Signal Assurance Tool</p>
 	</td>
       </tr>
       <tr>
-	<td valign="top" style="width:10%">
+	<td valign="top">
 	  Latitude: <br>
 	  Longitude: <br>
 	</td>
-	<td valign="top" style="width:10%">
+	<td valign="top">
 	  <input type=number id="latitude"/><br>
 	  <input type=number id="longitude"/><br>
 	  <button onClick="goto()">Go There</button>
+	  <br><br><br>
+	  > Use mouse to position a receiver.
 	</td>
 	<td valign="top">
 	  <input id = "calendar" class="flatpickr" type="text" placeholder=" Pick date/time ...">
@@ -128,7 +103,9 @@
 	      document.getElementById("surround-list").disabled = this.value == "w";
 	      setValue("env-buttons", "w");}
 	    </script>
-	  </div>	  
+	  </div>
+	  <br><br><br>
+	  <button id="computeBtn" onClick="run()">Compute</button>
 	</td>
 	<td valign="top">
 	  <div>
@@ -162,16 +139,9 @@
 	    </select>
 	  </div>
 	</td>
-      </tr>
-      <tr>
-	<td colspan = "4">
-	  * Use mouse to position a receiver.
-	</td>
-	<td colspan = "1">
-	  <button id="opener" onClick="run()">Compute</button>
-	</td>
-	<td colspan = "3">
-	  <button id="clearReceiver" onClick="clearReceiver()">Clear Receiver</button>
+	<td valign="top">
+	  <img src="static/pmpnt.png" width="200px">
+	  <p style="font-size:20px; font-family:Times; color:#39B64A">Signal Assurance Tool<p>
 	</td>
       </tr>
     </table>

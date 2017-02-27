@@ -78,9 +78,18 @@ function goto(){
 }
 
 
+function clearReceiver(){
+    if(newReceiver != null){
+	newReceiver.remove();
+	console.log("Removing old receiver");
+	newReceiver = null;
+    }
+}
+
+
 function run(){
     if(newReceiver == null){
-	alert("No receiver positioned.")
+	$( "#dialog" ).dialog("open");
 	return;
     }
     get_date();
