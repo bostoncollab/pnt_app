@@ -13,7 +13,7 @@ var popup = L.popup();
 
 var ipTarget = location.host
 // for laptop, uncomment below
-//ipTarget = "localhost"
+ipTarget = "localhost"
 
 var newReceiver = null;
 var dummt       = null;
@@ -75,15 +75,6 @@ function goto(){
     var latitude  = document.getElementById('latitude').value;
     mymap.panTo(new L.LatLng(latitude, longitude));
     mymap.setZoom(10);
-}
-
-
-function clearReceiver(){
-    if(newReceiver != null){
-	newReceiver.remove();
-	console.log("Removing old receiver");
-	newReceiver = null;
-    }
 }
 
 

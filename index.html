@@ -35,8 +35,8 @@
 
   <script>
     function setValue(id, newValue) {
-    var s = document.getElementById(id);
-    s.value = newValue;      
+       var s = document.getElementById(id);
+       s.value = newValue;      
     };
   </script>
 
@@ -48,6 +48,16 @@
     align: left;
     }
   </style>
+
+  <script>
+    function clearReceiver(){
+      if(newReceiver != null){
+         newReceiver.remove();
+         console.log("Removing old receiver");
+         newReceiver = null;
+      }
+    }
+  </script>
 
   <body>
 
