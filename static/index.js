@@ -13,7 +13,7 @@ var popup = L.popup();
 
 var ipTarget = location.host
 // for laptop, uncomment below
-ipTarget = "localhost"
+//ipTarget = "localhost"
 
 var newReceiver = null;
 var dummt       = null;
